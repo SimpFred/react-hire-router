@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Link, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
@@ -7,11 +7,21 @@ import PersonProfile from "./pages/PersonProfile";
 export default function App() {
   const [hiredPeople, setHiredPeople] = useState([]);
   const [people, setPeople] = useState([]);
+  const dataHasLoaded = useRef(false);
 
-  useEffect(() => {
+  const fetchPeople = () => {
     fetch("https://randomuser.me/api/?results=50")
       .then((response) => response.json())
-      .then((data) => setPeople(data.results));
+      .then((data) => {
+        setPeople(data.results);
+      });
+  };
+
+  useEffect(() => {
+    if (dataHasLoaded.current) return;
+    console.log("Fetching data...");
+    fetchPeople();
+    dataHasLoaded.current = true;
   }, []);
 
   return (
@@ -50,7 +60,6 @@ export default function App() {
             />
           }
         />
-
         <Route
           path="/edit/:id"
           element={
