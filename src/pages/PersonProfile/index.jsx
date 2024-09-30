@@ -7,9 +7,6 @@ function PersonProfile({ people, setHiredPeople, isEditMode, hiredPeople }) {
   const [person, setPerson] = useState(null);
   const { id } = useParams();
 
-  console.log(person);
-  console.log(id);
-
   useEffect(() => {
     const person = people.find((person) => person.login.uuid === id);
     setPerson(person);
